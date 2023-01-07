@@ -6,7 +6,9 @@ This page contains a list of big features. Please check the GitHub issues for al
 
 ### PrimeFaces
 
-* ...
+* Captcha
+    * Added attribute `sourceUrl` to override the Google JS location for countries that do not have access to Google.
+
 
 Look into [migration guide](https://primefaces.github.io/primefaces/13_0_0/#/../migrationguide/13_0_0) for more enhancements and changes.
 Or check the list of TODO+ issues closed for
