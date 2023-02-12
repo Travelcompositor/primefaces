@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -150,7 +150,7 @@ public abstract class AbstractFileUploadDecoder<T extends HttpServletRequest> im
     }
 
     protected void writeChunk(UploadedFile uploadedFile, Path path, ContentRange contentRange) throws IOException {
-        if (Files.notExists(path)) {
+        if (!path.toFile().exists()) {
             Files.createDirectory(path);
         }
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -674,5 +674,23 @@ public class ComponentUtils {
                 requestMap.put(var, oldValue);
             }
         }
+    }
+
+    public static int getRenderedChildCount(UIComponent component) {
+        int renderedChildCount = 0;
+
+        for (int i = 0; i < component.getChildCount(); i++) {
+            UIComponent child = component.getChildren().get(i);
+            if (child.isRendered()) {
+                renderedChildCount++;
+            }
+        }
+
+        return renderedChildCount;
+    }
+
+    public static boolean isDisabledOrReadonly(UIInput component) {
+        return Boolean.parseBoolean(String.valueOf(component.getAttributes().get("disabled")))
+                || Boolean.parseBoolean(String.valueOf(component.getAttributes().get("readonly")));
     }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -839,11 +839,11 @@ public class DataTable extends DataTableBase {
     }
 
     @Override
-    protected boolean visitRows(VisitContext context, VisitCallback callback, boolean visitRows) {
+    protected boolean visitRows(VisitContext context, VisitCallback callback, boolean visitRows, Set<UIComponent> rejectedChildren) {
         if (getFacesContext().isPostback() && !ComponentUtils.isSkipIteration(context, context.getFacesContext())) {
             loadLazyDataIfRequired();
         }
-        return super.visitRows(context, callback, visitRows);
+        return super.visitRows(context, callback, visitRows, rejectedChildren);
     }
 
     @Override
@@ -1129,8 +1129,8 @@ public class DataTable extends DataTableBase {
     }
 
     @Override
-    public void setFilterByAsMap(Map<String, FilterMeta> sortBy) {
-        getStateHelper().put(InternalPropertyKeys.filterByAsMap, sortBy);
+    public void setFilterByAsMap(Map<String, FilterMeta> filterBy) {
+        getStateHelper().put(InternalPropertyKeys.filterByAsMap, filterBy);
     }
 
     @Override

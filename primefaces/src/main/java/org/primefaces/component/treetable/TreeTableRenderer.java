@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -128,10 +128,10 @@ public class TreeTableRenderer extends DataRenderer {
             encodeNodeChildren(context, tt, root, root, tt.getFirst(), tt.getRows());
         }
         else {
-            if (tt.isDefaultFilter()) {
+            if (tt.isFilteringCurrentlyActive()) {
                 FilterFeature.getInstance().filter(context, tt, root);
             }
-            if (tt.isDefaultSort()) {
+            if (tt.isSortingCurrentlyActive()) {
                 SortFeature.getInstance().sort(context, tt);
             }
 
@@ -558,6 +558,7 @@ public class TreeTableRenderer extends DataRenderer {
         writer.startElement("tr", null);
         writer.writeAttribute("id", tt.getClientId(context) + "_node_" + rowKey, null);
         writer.writeAttribute("class", rowStyleClass, null);
+        writer.writeAttribute("title", tt.getRowTitle(), null);
         writer.writeAttribute(HTML.ARIA_EXPANDED, String.valueOf(treeNode.isExpanded()), null);
         writer.writeAttribute("data-rk", rowKey, null);
 
@@ -585,6 +586,7 @@ public class TreeTableRenderer extends DataRenderer {
 
                 String columnStyleClass = column.getStyleClass();
                 String columnStyle = column.getStyle();
+                String title = column.getTitle();
                 int rowspan = column.getRowspan();
                 int colspan = column.getColspan();
                 int responsivePriority = column.getResponsivePriority();
@@ -616,6 +618,9 @@ public class TreeTableRenderer extends DataRenderer {
                 }
                 if (colspan != 1) {
                     writer.writeAttribute("colspan", colspan, null);
+                }
+                if (title != null) {
+                    writer.writeAttribute("title", title, null);
                 }
 
                 if (i == 0) {

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -280,8 +280,8 @@ public class TreeTablePDFExporter extends TreeTableExporter {
                             break;
                     }
 
-                    int rowSpan = column.getRowspan();
-                    int colSpan = column.getColspan();
+                    int rowSpan = column.getExportRowspan() != 0 ? column.getExportRowspan() : column.getRowspan();
+                    int colSpan = column.getExportColspan() != 0 ? column.getExportColspan() : column.getColspan();
                     addColumnValue(pdfTable, textValue, rowSpan, colSpan);
                 }
                 return true;

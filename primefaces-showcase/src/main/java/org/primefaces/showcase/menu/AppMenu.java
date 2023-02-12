@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -253,6 +253,7 @@ public class AppMenu {
         dataTableMenuItems.add(new MenuItem("RowColor", "/ui/data/datatable/rowColor"));
         dataTableMenuItems.add(new MenuItem("RowExpansion", "/ui/data/datatable/expansion"));
         dataTableMenuItems.add(new MenuItem("RowGroup", "/ui/data/datatable/rowGroup"));
+        dataTableMenuItems.add(new MenuItem("RowTitle", "/ui/data/datatable/rowTitle"));
         dataTableMenuItems.add(new MenuItem("RTL", "/ui/data/datatable/rtl"));
         dataTableMenuItems.add(new MenuItem("Scroll", "/ui/data/datatable/scroll"));
         dataTableMenuItems.add(new MenuItem("Selection", "/ui/data/datatable/selection"));

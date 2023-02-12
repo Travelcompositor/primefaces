@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,8 @@ public abstract class SelectBooleanButtonBase extends HtmlSelectBooleanCheckbox 
         onLabel,
         offLabel,
         onIcon,
-        offIcon;
+        offIcon,
+        ariaLabel;
     }
 
     public SelectBooleanButtonBase() {
@@ -92,5 +93,13 @@ public abstract class SelectBooleanButtonBase extends HtmlSelectBooleanCheckbox 
 
     public void setOffIcon(String offIcon) {
         getStateHelper().put(PropertyKeys.offIcon, offIcon);
+    }
+
+    public String getAriaLabel() {
+        return (String) getStateHelper().eval(PropertyKeys.ariaLabel, null);
+    }
+
+    public void setAriaLabel(String ariaLabel) {
+        getStateHelper().put(PropertyKeys.ariaLabel, ariaLabel);
     }
 }

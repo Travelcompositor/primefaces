@@ -30,6 +30,7 @@
             style: null,
             styleClass: null,
             inline: false,
+            flex: false,
             selectionMode: 'single',
             rangeSeparator: '-',
             timeSeparator: ':',
@@ -72,7 +73,13 @@
                 monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                 today: 'Today',
-                clear: 'Clear'
+                clear: 'Clear',
+                year: 'Year',
+                month: 'Month',
+                week: 'Week',
+                day: 'Day',
+                am: 'AM',
+                pm: 'PM'
             },
             dateFormat: 'mm/dd/yy',
             yearRange: null,
@@ -266,9 +273,17 @@
             return dayIndex >= 7 ? dayIndex - 7 : dayIndex;
         },
 
+        getFirstDayOfWeek: function () {
+            return this.options.locale.firstDay !== undefined ? this.options.locale.firstDay : this.options.locale.firstDayOfWeek;
+        },
+
         getSundayIndex: function () {
-            var firstDayOfWeek = this.options.locale.firstDay !== undefined ? this.options.locale.firstDay : this.options.locale.firstDayOfWeek;
+            var firstDayOfWeek = this.getFirstDayOfWeek();
             return firstDayOfWeek > 0 ? 7 - firstDayOfWeek : 0;
+        },
+
+        getSaturdayIndex: function () {
+            return 7 - this.getFirstDayOfWeek() - 1;
         },
 
         getDaysCountInMonth: function (month, year) {
@@ -322,7 +337,7 @@
 
         createWeekDaysInternal: function (dayNames) {
             var weekDays = [],
-                dayIndex = this.options.locale.firstDay !== undefined ? this.options.locale.firstDay : this.options.locale.firstDayOfWeek;
+                dayIndex = this.getFirstDayOfWeek();
             for (var i = 0; i < 7; i++) {
                 weekDays.push(dayNames[dayIndex]);
                 dayIndex = (dayIndex === 6) ? 0 : ++dayIndex;
@@ -747,7 +762,7 @@
             }
 
             if (this.options.hourFormat === '12') {
-                output += date.getHours() > 11 ? ' PM' : ' AM';
+                output += date.getHours() > 11 ? ' ' + this.options.locale.pm : ' ' + this.options.locale.am;
             }
 
             return output;
@@ -772,9 +787,9 @@
                 throw "Invalid time";
             }
             else {
-                if (this.options.hourFormat === '12' && h !== 12 && ampm === 'PM') {
+                if (this.options.hourFormat === '12' && h !== 12 && ampm === this.options.locale.pm) {
                     h += 12;
-                } else if (this.options.hourFormat === '12' && h === 12 && ampm === 'AM') {
+                } else if (this.options.hourFormat === '12' && h === 12 && ampm === this.options.locale.am) {
                     h -= 12;
                 }
 
@@ -992,6 +1007,12 @@
                 if (this.options.showTime) {
                     var ampm = this.options.hourFormat === '12' ? parts.pop() : null;
                     var timeString = parts.pop();
+                    
+                    // #9559 some locales are "a. m." with a space 
+                    if (/\d/.test(timeString) === false) {
+                        ampm = timeString + ' ' +  ampm;
+                        timeString = parts.pop();
+                    }
 
                     date = this.parseDate(parts.join(' '), this.options.dateFormat);
                     this.populateTime(date, timeString, ampm);
@@ -1005,7 +1026,7 @@
         },
 
         populateTime: function (value, timeString, ampm) {
-            if (this.options.hourFormat === '12' && (ampm !== 'PM' && ampm !== 'AM')) {
+            if (this.options.hourFormat === '12' && (ampm !== this.options.locale.pm && ampm !== this.options.locale.am)) {
                 throw new Error('Invalid Time');
             }
 
@@ -1257,12 +1278,15 @@
         },
 
         renderButtonBar: function () {
+            var grid = this.options.flex ? 'grid' : 'ui-g';
+            var today = this.options.flex ? 'col-6 text-left' : 'ui-g-6';
+            var clear = this.options.flex ? 'col-6 text-right' : 'ui-g-6';
             return '<div class="ui-datepicker-buttonbar ui-widget-header">' +
-                '<div class="ui-g">' +
-                '<div class="ui-g-6">' +
+                '<div class="'+grid+'">' +
+                '<div class="'+today+'">' +
                 '<button type="button" class="ui-today-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ' + this.options.todayButtonStyleClass + '"><span class="ui-button-text">' + this.options.locale.today + '</span></button>' +
                 '</div>' +
-                '<div class="ui-g-6">' +
+                '<div class="'+clear+'">' +
                 '<button type="button" class="ui-clear-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ' + this.options.clearButtonStyleClass + '"><span class="ui-button-text">' + this.options.locale.clear + '</span></button>' +
                 '</div>' +
                 '</div>' +
@@ -1344,7 +1368,7 @@
 
         renderTitleMonthElement: function (month, index) {
             if (this.options.monthNavigator && this.options.view !== 'month' && index === 0) {
-                return '<select class="ui-datepicker-month">' + this.renderTitleOptions('month', this.options.locale.monthNamesShort, month) + '</select>';
+                return '<select class="ui-datepicker-month" aria-label="'+this.options.locale.month+'">' + this.renderTitleOptions('month', this.options.locale.monthNamesShort, month) + '</select>';
             }
             else {
                 return '<span class="ui-datepicker-month">' + this.escapeHTML(this.options.locale.monthNames[month]) + '</span>' + '&#xa0;';
@@ -1363,7 +1387,7 @@
                     yearOptions.push(i);
                 }
 
-                return '<select class="ui-datepicker-year">' + this.renderTitleOptions('year', yearOptions, year) + '</select>';
+                return '<select class="ui-datepicker-year" aria-label="'+this.options.locale.year+'">' + this.renderTitleOptions('year', yearOptions, year) + '</select>';
             }
             else {
                 return '<span class="ui-datepicker-year">' + year + '</span>';
@@ -1458,16 +1482,16 @@
         },
 
         calculateWeekNumber: function(d) {
-            var dow = this.options.locale.firstDay !== undefined ? this.options.locale.firstDay : this.options.locale.firstDayOfWeek,
+            var firstDayOfWeek = this.getFirstDayOfWeek(),
                 doy = this.options.locale.firstDayWeekOffset,
-                weekOffset = this.firstWeekOffset(d.year, dow, doy),
+                weekOffset = this.firstWeekOffset(d.year, firstDayOfWeek, doy),
                 week = Math.floor((this.dayOfYear(d) - weekOffset - 1) / 7) + 1;
 
             if(week < 1) {
-                return week + this.weeksInYear(resYear, dow, doy);
+                return week + this.weeksInYear(resYear, firstDayOfWeek, doy);
             }
-            else if(week > this.weeksInYear(d.year, dow, doy)) {
-                return  week - this.weeksInYear(d.year, dow, doy);
+            else if(week > this.weeksInYear(d.year, firstDayOfWeek, doy)) {
+                return  week - this.weeksInYear(d.year, firstDayOfWeek, doy);
             }
             else {
                 return  week;
@@ -1487,11 +1511,14 @@
                     '</span></td>';
             }
 
+            var saturdayIndex = this.getSaturdayIndex();
+            var sundayIndex = this.getSundayIndex();
             for (var i = 0; i < weekDates.length; i++) {
                 var date = weekDates[i],
                     cellClass = this.getClassesToAdd({
                         'ui-datepicker-other-month': date.otherMonth,
                         'ui-datepicker-today': date.today,
+                        'ui-datepicker-week-end': i == sundayIndex || i == saturdayIndex,
                         'ui-datepicker-other-month-hidden': date.otherMonth && !this.options.showOtherMonths
                     }),
                     dateClass = this.getClassesToAdd({
@@ -1622,7 +1649,7 @@
         renderAmPmPicker: function () {
             if (this.options.hourFormat === '12') {
                 var hour = this.isDate(this.value) ? this.value.getHours() : this.viewDate.getHours(),
-                    display = hour > 11 ? 'PM' : 'AM';
+                    display = hour > 11 ? this.options.locale.pm : this.options.locale.am;
 
                 return this.renderTimeElements("ui-ampm-picker", '<span>' + display + '</span>', 4);
             }
@@ -2062,7 +2089,7 @@
         },
 
         onTimePickerElementMouseDown: function (event, type, direction) {
-            if (!this.options.disabled && event.which === 1) {
+            if (!this.options.disabled && event.button === 0) { // left button
                 this.repeat(event, null, type, direction);
                 event.preventDefault();
             }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ import javax.faces.context.ResponseWriter;
 
 import org.primefaces.expression.SearchExpressionFacade;
 import org.primefaces.renderkit.CoreRenderer;
+import org.primefaces.renderkit.RendererUtils;
 
 public class FocusRenderer extends CoreRenderer {
 
@@ -58,7 +59,7 @@ public class FocusRenderer extends CoreRenderer {
         writer.endElement("span");
 
         writer.startElement("script", focus);
-        writer.writeAttribute("type", "text/javascript", null);
+        RendererUtils.encodeScriptTypeIfNecessary(context);
 
         if (isValueBlank(focus.getFor())) {
             encodeImplicitFocus(context, focus);

@@ -18,7 +18,7 @@ DataTable displays data in tabular format.
 ## Attributes
 
 | Name                      | Default            | Type             | Description
-| ------------------------- | ------------------ | ---------------- | ------------------ |
+|---------------------------| ------------------ | ---------------- | ------------------ |
 | allowUnsorting            | false              | Boolean          | Defines whether columns are allowed to be unsorted. Default is false.
 | ariaRowLabel              | null               | String           | Label to read by screen readers on checkbox selection.
 | binding                   | null               | Object           | An el expression that maps to a server side UIComponent instance in a backing bean
@@ -41,6 +41,8 @@ DataTable displays data in tabular format.
 | emptyMessage              | No records found.  | String           | Text to display when there is no data to display. Alternative is emptyMessage facet.
 | escapeText                | true               | Boolean          | Defines if headerText and footerText values on columns are escaped or not. Default is true.
 | expandedRow               | false              | Boolean          | Defines if row should be rendered as expanded by default.
+| exportTag                 | null               | String           | If XML data exporter in use, this allows customization of the document tag in the XML.
+| exportRowTag              | null               | String           | If XML data exporter in use, this allows customization of the row tag in the XML.
 | filterBy                  | null               | FilterMeta / Collection<FilterMeta> | Property to be used for default filtering. Expects a single or a collection of FilterMeta.
 | filterDelay               | 300                | Integer          | Delay in milliseconds before sending an ajax filter query.
 | filterEvent               | keyup              | String           | Event triggering filter for input filters.
@@ -83,6 +85,7 @@ DataTable displays data in tabular format.
 | rows                      | 0                  | Integer          | Number of rows to display per page.
 | rowsPerPageLabel          | null               | String           | Label for the rowsPerPage dropdown.
 | rowsPerPageTemplate       | null               | String           | Template of the rowsPerPage dropdown.
+| rowTitle                  | null               | String           | Title for each row.
 | saveOnCellBlur            | true               | Boolean          | Saves the changes in cell editing on blur, when set to false changes are discarded.
 | scrollHeight              | null               | Integer          | Scroll viewport height.
 | scrollRows                | 0                  | Integer          | Number of rows to load on live scroll.

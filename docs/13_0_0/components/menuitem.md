@@ -56,6 +56,7 @@ containerStyleClass | null | String | Style class of the menuitem container.
 form | null | String | Form to serialize for an ajax request. Default is the enclosing form.
 escape | true | Boolean | Defines whether value would be escaped or not
 rel | null | String | Defines the relationship between the current document and the linked document.
+ariaLabel | null | String | The aria-label attribute is used to define a string that labels the current element for accessibility.
 
 ## Getting started with MenuItem
 MenuItem is a generic component used by the following components.
@@ -77,13 +78,25 @@ Note that some attributes of menuitem might not be supported by these menu compo
 the specific component documentation for more information.
 
 ## Navigation vs Action
-Menuitem has two use cases, directly navigating to a url with GET or doing a POST to execute an
-action. This is decided by url or outcome attributes, if either one is present menuitem does a GET
-request, if not parent form is posted with or without ajax decided by _ajax_ attribute.
+Menuitem has two use cases, directly navigating to a URL with GET or doing a POST to execute an
+action. This is decided by URL or outcome attributes, if either one is present MenuItem does a GET
+request, if not parent form is posted with or without AJAX decided by _ajax_ attribute.
+
+## Custom Rendering
+For special use cases you might want to completely control the rendering of a MenuItem. You can
+use the `<f:facet name="custom">` to control the rendering like this.
+
+```xhtml
+<p:menuitem>
+   <f:facet name="custom">
+       <h:link outcome="NewPage" value="My Custom Link"/>
+    </f:facet>
+</p:menuitem>
+```
 
 ## Icons
-There are two ways to specify an icon of a menuitem, you can either use bundled icons within
-PrimeFaces or provide your own via css.
+There are two ways to specify an icon of a MenuItem, you can either use bundled icons within
+PrimeFaces or provide your own via CSS.
 
 #### ThemeRoller Icons ####
 

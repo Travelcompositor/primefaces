@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ public class DataListRenderer extends DataRenderer {
             encodeScript(context, list);
 
             if (list.isPaginator() && list.getRows() == 0) {
-                LOGGER.log(Level.WARNING, "DataList with paginator=true should also set the rows attribute. ClientId: " + list.getClientId());
+                LOGGER.log(Level.WARNING, "DataList with paginator=true should also set the rows attribute. ClientId: {0}", list.getClientId());
             }
         }
     }

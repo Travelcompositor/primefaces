@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,16 @@
  */
 package org.primefaces.util;
 
-import org.primefaces.config.PrimeConfiguration;
-
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 import java.util.Map;
+
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+
 import org.primefaces.component.api.Widget;
+import org.primefaces.config.PrimeConfiguration;
+import org.primefaces.renderkit.RendererUtils;
 
 /**
  * Helper to generate scripts for widgets.
@@ -137,7 +139,7 @@ public class WidgetBuilder {
         ResponseWriter rw = context.getResponseWriter();
         rw.startElement("script", null);
         rw.writeAttribute("id", id + "_s", null);
-        rw.writeAttribute("type", "text/javascript", null);
+        RendererUtils.encodeScriptTypeIfNecessary(context);
     }
 
     protected WidgetBuilder renderLifecycleCallbacks(UIComponent component) throws IOException {

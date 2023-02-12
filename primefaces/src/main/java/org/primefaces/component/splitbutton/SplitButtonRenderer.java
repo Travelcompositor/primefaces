@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2023 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 package org.primefaces.component.splitbutton;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -134,7 +135,10 @@ public class SplitButtonRenderer extends MenuItemAwareRenderer {
             }
         }
 
-        renderPassThruAttributes(context, button, HTML.BUTTON_WITH_CLICK_ATTRS);
+        // GitHub #9381 ignore style as its applied to parent div
+        List<String> attrs = new ArrayList<>(HTML.BUTTON_WITHOUT_CLICK_ATTRS);
+        attrs.remove("style");
+        renderPassThruAttributes(context, button, attrs);
 
         if (button.isDisabled()) {
             writer.writeAttribute("disabled", "disabled", "disabled");
@@ -155,7 +159,8 @@ public class SplitButtonRenderer extends MenuItemAwareRenderer {
         writer.writeAttribute("class", HTML.BUTTON_TEXT_CLASS, null);
 
         if (value == null) {
-            writer.write("ui-button");
+            //For ScreenReader
+            writer.write(getIconOnlyButtonText(button.getTitle(), button.getAriaLabel()));
         }
         else {
             writer.writeText(value, "value");
@@ -191,7 +196,7 @@ public class SplitButtonRenderer extends MenuItemAwareRenderer {
         //text
         writer.startElement("span", null);
         writer.writeAttribute("class", HTML.BUTTON_TEXT_CLASS, null);
-        writer.write("ui-button");
+        writer.write(getIconOnlyButtonText(button.getTitle(), button.getAriaLabel()));
         writer.endElement("span");
 
         writer.endElement("button");
@@ -206,7 +211,8 @@ public class SplitButtonRenderer extends MenuItemAwareRenderer {
         if (button.isFilter()) {
             wb.attr("filter", true)
                     .attr("filterMatchMode", button.getFilterMatchMode(), null)
-                    .nativeAttr("filterFunction", button.getFilterFunction(), null);
+                    .nativeAttr("filterFunction", button.getFilterFunction(), null)
+                    .attr("filterNormalize", button.isFilterNormalize(), false);
         }
 
         wb.attr("disableOnAjax", button.isDisableOnAjax(), true)
